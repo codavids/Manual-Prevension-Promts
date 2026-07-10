@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Guía de Seguridad Digital</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e8;
+    line-height: 1.6;
+    font-size: 18px;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px;
+    user-select: none;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 30px 0 20px;
+  }
+  .header .icon { font-size: 48px; }
+  .header h1 { font-size: 26px; color: #6db3f2; margin-top: 8px; }
+  .header p { color: #8888a0; font-size: 16px; margin-top: 4px; }
+
+  /* ── Navigation ── */
+  .nav-grid {
+    display: grid;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .nav-card {
+    background: #1a1a2e;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: transform 0.15s;
+    border: 1px solid #2a2a40;
+  }
+  .nav-card:active { transform: scale(0.97); background: #222240; }
+  .nav-card .emoji { font-size: 36px; }
+  .nav-card .title { font-size: 18px; font-weight: 700; color: #6db3f2; }
+  .nav-card .sub { font-size: 14px; color: #8088a0; }
+
+  /* ── Sections ── */
+  .section { display: none; margin-top: 10px; }
+  .section.active { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .back-btn {
+    background: #1a1a2e;
+    border: 1px solid #2a2a40;
+    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e0e0e8;
+  }
+  .back-btn:active { background: #2a2a40; }
+  .section-title { font-size: 22px; font-weight: 800; color: #6db3f2; }
+
+  /* ── Flip Cards ── */
+  .card-stack { display: grid; gap: 12px; margin: 16px 0; }
+  .flip-card {
+    perspective: 600px;
+    height: 150px;
+    cursor: pointer;
+  }
+  .flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+  }
+  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    backface-visibility: hidden;
+    font-size: 17px;
+  }
+  .flip-front {
+    background: #1e1e35;
+    border: 2px solid #2e2e48;
+    font-weight: 700;
+    color: #d0d0d8;
+    gap: 10px;
+    flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+  .flip-front .hint { font-size: 13px; color: #6a6a80; font-weight: 400; }
+  .flip-back {
+    background: #162d50;
+    color: #e8e8f0;
+    transform: rotateY(180deg);
+    padding: 16px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+
+  /* ── Golden Rule ── */
+  .rule-box {
+    background: linear-gradient(135deg, #162d50, #1a4270);
+    color: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .rule-box h3 { font-size: 18px; margin-bottom: 14px; text-align: center; }
+  .rule-steps { display: grid; gap: 10px; }
+  .rule-step {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .rule-step .num {
+    background: #6db3f2;
+    color: #0f0f1a;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .rule-step .text { font-size: 15px; }
+  .rule-step .emoji-big { font-size: 22px; flex-shrink: 0; }
+
+  /* ── Infobox ── */
+  .info-box {
+    background: #1a1a2e;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 16px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    border: 1px solid #2a2a40;
+  }
+  .info-box h3 { font-size: 18px; color: #6db3f2; margin-bottom: 10px; }
+
+  .scam-list { list-style: none; display: grid; gap: 10px; }
+  .scam-list li {
+    background: #2a1a1a;
+    border-left: 4px solid #e74c3c;
+    padding: 12px 14px;
+    border-radius: 0 10px 10px 0;
+    font-size: 15px;
+  }
+
+  /* ── Password Checker ── */
+  .password-area {
+    background: #1a1a2e;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 16px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    border: 1px solid #2a2a40;
+  }
+  .password-area h3 { font-size: 18px; color: #6db3f2; margin-bottom: 10px; }
+  .password-area input {
+    width: 100%;
+    font-size: 20px;
+    padding: 14px;
+    border: 2px solid #3a3a55;
+    border-radius: 12px;
+    text-align: center;
+    letter-spacing: 2px;
+    background: #12122a;
+    color: #e0e0e8;
+  }
+  .password-area input:focus { border-color: #6db3f2; outline: none; }
+  .password-area input::placeholder { color: #555; }
+  .strength-bar {
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 10px;
+    background: #252540;
+    transition: all 0.3s;
+  }
+  .strength-bar.fill { height: 8px; border-radius: 4px; transition: all 0.3s; }
+  .strength-label { text-align: center; font-size: 15px; margin-top: 6px; font-weight: 600; }
+  .feedback { font-size: 14px; color: #8888a0; margin-top: 8px; text-align: center; min-height: 20px; }
+
+  .checklist { display: grid; gap: 8px; margin: 14px 0; }
+  .checklist .item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+  }
+  .checklist .item .box {
+    width: 24px; height: 24px;
+    border: 2px solid #4a4a65;
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: transparent;
+    cursor: pointer;
+  }
+  .checklist .item .box.checked {
+    background: #27ae60;
+    border-color: #27ae60;
+    color: white;
+  }
+
+  /* ── Quiz ── */
+  .quiz-area { margin: 20px 0; }
+  .quiz-case {
+    background: #1a1a2e;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 12px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    border: 1px solid #2a2a40;
+    display: none;
+  }
+  .quiz-case.active { display: block; }
+  .quiz-case .message {
+    background: #1e1e35;
+    border-radius: 12px;
+    padding: 16px;
+    font-style: italic;
+    margin: 10px 0;
+    font-size: 16px;
+    border-left: 4px solid #f39c12;
+    color: #d0d0d8;
+  }
+  .quiz-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .quiz-btn {
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .quiz-btn.real { background: #1a3a2a; color: #4ade80; }
+  .quiz-btn.estafa { background: #3a1a1a; color: #f87171; }
+  .quiz-btn:active { transform: scale(0.95); }
+  .quiz-feedback {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correcto { background: #1a3a2a; color: #4ade80; }
+  .quiz-feedback.incorrecto { background: #3a1a1a; color: #f87171; }
+  .quiz-next {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    background: #162d50;
+    color: #6db3f2;
+    border: 1px solid #2a4a70;
+    border-radius: 12px;
+    margin-top: 10px;
+    cursor: pointer;
+    display: none;
+  }
+  .quiz-next:active { background: #1a3a60; }
+  .quiz-result { text-align: center; margin: 20px 0; display: none; }
+  .quiz-result.show { display: block; }
+  .quiz-result .score { font-size: 48px; font-weight: 800; color: #6db3f2; }
+  .quiz-result p { color: #b0b0c0; }
+  .quiz-restart {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    background: #1a3a2a;
+    color: #4ade80;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 12px;
+    font-weight: 700;
+  }
+  .quiz-restart:active { background: #1e4a2e; }
+
+  /* ── Notebook section ── */
+  .notebook-rules { counter-reset: rule; display: grid; gap: 10px; margin: 12px 0; }
+  .notebook-rules li {
+    counter-increment: rule;
+    background: #1e1e35;
+    padding: 14px 14px 14px 50px;
+    position: relative;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    font-size: 15px;
+    border: 1px solid #2a2a40;
+  }
+  .notebook-rules li::before {
+    content: counter(rule);
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    background: #6db3f2;
+    color: #0f0f1a;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+  }
+
+  .example-box {
+    background: #1e2a1a;
+    border: 1px dashed #4ade80;
+    border-radius: 12px;
+    padding: 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #b0d8b0;
+  }
+
+  .dont-list {
+    display: grid;
+    gap: 6px;
+    margin: 10px 0;
+  }
+  .dont-list li {
+    background: #2a1a1a;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── Password formula box ── */
+  .formula-box {
+    background: #1a2a1a;
+    border-left: 4px solid #4ade80;
+  }
+
+  code {
+    background: #2a2a40;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #f0a060;
+  }
+
+  /* ── Font Size Controls ── */
+  .font-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0 0;
+  }
+  .font-btn {
+    background: #1a1a2e;
+    border: 1px solid #2a2a40;
+    color: #e0e0e8;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .font-btn:active { background: #2a2a40; }
+  .font-label {
+    font-size: 13px;
+    color: #8888a0;
+  }
+
+  /* ── Share Button ── */
+  .share-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #25D366;
+    color: white;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(37,211,102,0.4);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s;
+  }
+  .share-float:active { transform: scale(0.9); }
+
+  /* ── Quiz Progress ── */
+  .quiz-progress {
+    text-align: center;
+    font-size: 14px;
+    color: #8888a0;
+    margin-bottom: 12px;
+  }
+  .quiz-progress span {
+    color: #6db3f2;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div id="home" class="section active">
+  <div class="header">
+    <div class="icon">🛡️</div>
+    <h1>Guía de Seguridad Digital</h1>
+    <p>Para adultos mayores · Toque cada sección para explorar</p>
+    <div class="font-controls">
+      <button class="font-btn" onclick="changeFont(-2)" title="Letra más pequeña">A-</button>
+      <span class="font-label" id="fontLabel">Normal</span>
+      <button class="font-btn" onclick="changeFont(+2)" title="Letra más grande">A+</button>
+    </div>
+  </div>
+
+  <div class="nav-grid">
+    <div class="nav-card" onclick="openSection('mensajes')">
+      <div class="emoji">📱</div>
+      <div><div class="title">Mensajes Engañosos</div><div class="sub">Aprenda a identificarlos</div></div>
+    </div>
+    <div class="nav-card" onclick="openSection('llamadas')">
+      <div class="emoji">📞</div>
+      <div><div class="title">Llamadas Fraudulentas</div><div class="sub">Cómo protegerse</div></div>
+    </div>
+    <div class="nav-card" onclick="openSection('contrasenas')">
+      <div class="emoji">🔐</div>
+      <div><div class="title">Contraseñas Seguras</div><div class="sub">Cree y guarde sus claves</div></div>
+    </div>
+    <div class="nav-card" onclick="startQuiz()">
+      <div class="emoji">🧪</div>
+      <div><div class="title">Reto: ¿Real o Estafa?</div><div class="sub">Ponga a prueba lo aprendido</div></div>
+    </div>
+    <div class="nav-card" onclick="openSection('gemini')">
+      <div class="emoji">🤖</div>
+      <div><div class="title">Gemini y Prompts</div><div class="sub">Háblele a la inteligencia artificial</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SECCIÓN 1: MENSAJES ═══════════ -->
+<div id="mensajes" class="section">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="section-title">📱 Mensajes Engañosos</div>
+  </div>
+
+  <h3 style="color:#6db3f2;margin-bottom:8px;">Las 3 señales de alerta (toque para ver)</h3>
+
+  <div class="card-stack">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          🔴 Señal #1: Urgencia
+          <span class="hint">Toque para ver más →</span>
+        </div>
+        <div class="flip-back">
+          "Su cuenta será BLOQUEADA", "Necesito plata YA", "ÚLTIMA OPORTUNIDAD".<br><br>
+          El estafador quiere que actúe sin pensar. La prisa es una trampa.
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          🟡 Señal #2: Número Desconocido
+          <span class="hint">Toque para ver más →</span>
+        </div>
+        <div class="flip-back">
+          El mensaje viene de un número que usted NO tiene guardado.<br><br>
+          Frase clave: "Si el número no está en mis contactos, NADIE cercano me está hablando."
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          🔵 Señal #3: Enlaces Sospechosos
+          <span class="hint">Toque para ver más →</span>
+        </div>
+        <div class="flip-back">
+          Direcciones raras como "banc0lombia" (con cero), enlaces acortados o botones de "clic aquí".<br><br>
+          NUNCA haga clic en un enlace que llegó por mensaje.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>📋 Mensajes reales que circulan en Colombia</h3>
+    <ul class="scam-list">
+      <li><strong>"Hola mamá, perdí mi celular y este es mi nuevo número."</strong> — SMS inicial de la estafa más común. Luego migran a WhatsApp para pedir plata. Verifique llamando al número antiguo.</li>
+      <li><strong>"Bancolombia informa: se activó su Plan Cardif por $109.990. ¿No fuiste tú? Cancele aquí:"</strong> — SMS falso con enlace a páginas rusas (.ru). Los bancos NUNCA envían links de cancelación por mensaje.</li>
+      <li><strong>"DIAN: aviso de embargo de activos bancarios por mora fiscal. Plazo máximo 31/03. Detalles: bityl.co/Dian..."</strong> — Usan enlaces acortados para ocultar páginas falsas. La DIAN solo se comunica por canales oficiales .gov.co</li>
+      <li><strong>"BONO MUJER $850.000 — Inscríbase ya, cupos limitados"</strong> — Usan el nombre de Prosperidad Social y del presidente. Ningún subsidio real se reclama por WhatsApp.</li>
+    </ul>
+  </div>
+
+  <div class="rule-box">
+    <h3>🛡️ La Regla de Oro</h3>
+    <div class="rule-steps">
+      <div class="rule-step">
+        <div class="emoji-big">📵</div>
+        <div class="num">1</div>
+        <div class="text"><strong>Cuelgue</strong><br>No responda, no haga clic, no comparta nada.</div>
+      </div>
+      <div class="rule-step">
+        <div class="emoji-big">🧠</div>
+        <div class="num">2</div>
+        <div class="text"><strong>Piense</strong><br>¿Conozco este número? ¿Es demasiado bueno para ser verdad?</div>
+      </div>
+      <div class="rule-step">
+        <div class="emoji-big">📞</div>
+        <div class="num">3</div>
+        <div class="text"><strong>Llame</strong><br>Verifique por otra vía: llame al número que usted ya conoce.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SECCIÓN 2: LLAMADAS ═══════════ -->
+<div id="llamadas" class="section">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="section-title">📞 Llamadas Fraudulentas</div>
+  </div>
+
+  <h3 style="color:#6db3f2;margin-bottom:8px;">Tipos de estafa (toque para ver)</h3>
+
+  <div class="card-stack">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          🏦 Suplantación de Bancos
+          <span class="hint">Toque para ver más →</span>
+        </div>
+        <div class="flip-back">
+          "La llamamos de Bancolombia. Hay un cargo sospechoso. Necesitamos su clave."<br><br>
+          ⚠️ Ningún banco pide claves por teléfono. Jamás.
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          👨‍👩‍👧 Suplantación de Familiares
+          <span class="hint">Toque para ver más →</span>
+        </div>
+        <div class="flip-back">
+          "Abuelita, soy yo, tuve un accidente. Necesito plata urgente."<br><br>
+          ⚠️ Pueden clonar voces con inteligencia artificial. Verifique llamando al número que usted ya tiene guardado.
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          🏛️ Falsas Entidades de Gobierno
+          <span class="hint">Toque para ver más →</span>
+        </div>
+        <div class="flip-back">
+          "Somos de Colpensiones / DIAN / EPS. Tiene un subsidio pendiente. Necesitamos sus datos."<br><br>
+          ⚠️ Ninguna entidad pide pagos ni datos personales por teléfono.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <h3>🛡️ ¿Qué hacer? Protocolo</h3>
+    <div class="rule-steps">
+      <div class="rule-step">
+        <div class="emoji-big">✋</div>
+        <div class="num">1</div>
+        <div class="text"><strong>Cuelga</strong><br>Si le piden plata o lo presionan, cuelgue sin dar explicaciones. "Ante la duda, cuelgue."</div>
+      </div>
+      <div class="rule-step">
+        <div class="emoji-big">📞</div>
+        <div class="num">2</div>
+        <div class="text"><strong>Verifica</strong><br>Llame usted al número oficial. "Yo llamo, no me llaman."</div>
+      </div>
+      <div class="rule-step">
+        <div class="emoji-big">🚫</div>
+        <div class="num">3</div>
+        <div class="text"><strong>Bloquea</strong><br>Bloquee el número y repórtelo al 123 (Policía) o 122 (Fiscalía).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>🧠 Frases para recordar</h3>
+    <p style="margin-bottom:8px;color:#d0d0d8;">"El que lo afana a decidir, lo quiere estafar."</p>
+    <p style="margin-bottom:8px;color:#d0d0d8;">"El número en pantalla se puede falsificar. No confíe en eso."</p>
+    <p style="color:#d0d0d8;">"Que alguien sea amable por teléfono no significa que sea honesto."</p>
+  </div>
+</div>
+
+<!-- ═══════════ SECCIÓN 3: CONTRASEÑAS ═══════════ -->
+<div id="contrasenas" class="section">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="section-title">🔐 Contraseñas Seguras</div>
+  </div>
+
+  <div class="info-box">
+    <h3>❌ Lo que NUNCA debe usar</h3>
+    <ul class="dont-list">
+      <li>❌ <code>123456</code> o <code>contraseña</code></li>
+      <li>❌ Su fecha de nacimiento o cédula</li>
+      <li>❌ Nombres de hijos, nietos o mascotas</li>
+      <li>❌ <code>colombia2024</code> o <code>teamo</code></li>
+    </ul>
+  </div>
+
+  <div class="password-area">
+    <h3>✏️ Verificador de contraseñas</h3>
+    <p style="font-size:14px;color:#8888a0;margin-bottom:10px;">Escriba una contraseña para ver si es segura:</p>
+    <input type="text" id="passInput" placeholder="Escriba aquí..." oninput="checkPassword()" autocomplete="off">
+    <div class="strength-bar" style="height:8px;border-radius:4px;background:#252540;margin-top:10px;position:relative;overflow:hidden;">
+      <div id="strengthFill" style="height:100%;width:0%;border-radius:4px;transition:width 0.3s,background 0.3s;"></div>
+    </div>
+    <div class="strength-label" id="strengthLabel">-</div>
+    <div class="feedback" id="passFeedback"></div>
+  </div>
+
+  <div class="info-box formula-box">
+    <h3>✏️ Fórmula para crear contraseñas</h3>
+    <p style="margin-bottom:10px;color:#d0d0d8;"><strong>Algo que le gusta + un número importante + un símbolo</strong></p>
+    <div class="example-box">
+      ☕ Cafecito*1948<br>
+      🌺 Orquidea#Bogota<br>
+      🎵 Vallenato$5hijos
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>📓 El método del cuaderno físico</h3>
+    <p style="margin-bottom:8px;font-size:15px;color:#b0b0c0;">No necesita apps. Un hacker no puede robar un cuaderno que está en su casa.</p>
+    <ol class="notebook-rules">
+      <li>Use un <strong>cuaderno pequeño</strong>, solo para contraseñas.</li>
+      <li>Guárdelo en un <strong>lugar privado</strong> (cajón de la mesa de noche).</li>
+      <li>Escriba con claridad: <strong>sitio, usuario y clave</strong>.</li>
+      <li><strong>No le tome foto</strong> ni lo comparta por WhatsApp.</li>
+    </ol>
+  </div>
+
+  <div class="password-area">
+    <h3>✅ Checklist: ¿Su contraseña es segura?</h3>
+    <div class="checklist">
+      <div class="item" onclick="this.querySelector('.box').classList.toggle('checked')">
+        <div class="box">✓</div> No es <code>123456</code> ni su fecha de nacimiento
+      </div>
+      <div class="item" onclick="this.querySelector('.box').classList.toggle('checked')">
+        <div class="box">✓</div> Tiene al menos 8 caracteres
+      </div>
+      <div class="item" onclick="this.querySelector('.box').classList.toggle('checked')">
+        <div class="box">✓</div> Incluye mayúsculas Y minúsculas
+      </div>
+      <div class="item" onclick="this.querySelector('.box').classList.toggle('checked')">
+        <div class="box">✓</div> Tiene números o símbolos (* # $ @ !)
+      </div>
+      <div class="item" onclick="this.querySelector('.box').classList.toggle('checked')">
+        <div class="box">✓</div> No la usa en otros sitios importantes
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ QUIZ ═══════════ -->
+<div id="quiz" class="section">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="section-title">🧪 Reto: ¿Real o Estafa?</div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-progress">Pregunta <span id="quizCurrent">1</span> de <span>5</span></div>
+    <div class="quiz-case active" data-quiz="0">
+      <div class="message">"Hola abuelita, soy Juan. Estoy en el hospital, necesito 300 mil para una cirugía urgente. Transfiéreme a este Nequi."</div>
+      <div class="quiz-btns">
+        <button class="quiz-btn real" onclick="answerQuiz(0, 'real')">✅ ES REAL</button>
+        <button class="quiz-btn estafa" onclick="answerQuiz(0, 'estafa')">⚠️ ES ESTAFA</button>
+      </div>
+      <div class="quiz-feedback"></div>
+      <button class="quiz-next" onclick="nextQuiz()">Siguiente →</button>
+    </div>
+
+    <div class="quiz-case" data-quiz="1">
+      <div class="message">"Señora María, mañana es su cita médica en la EPS a las 10am. Por favor confirme su asistencia respondiendo SÍ a este mensaje."</div>
+      <div class="quiz-btns">
+        <button class="quiz-btn real" onclick="answerQuiz(1, 'real')">✅ ES REAL</button>
+        <button class="quiz-btn estafa" onclick="answerQuiz(1, 'estafa')">⚠️ ES ESTAFA</button>
+      </div>
+      <div class="quiz-feedback"></div>
+      <button class="quiz-next" onclick="nextQuiz()">Siguiente →</button>
+    </div>
+
+    <div class="quiz-case" data-quiz="2">
+      <div class="message">"Bancolombia informa que hoy se activó su Plan Cardif por $109.990. ¿No fuiste tú? Puede cancelar el cargo aquí: virtualsucursal.monitoreo.ru"</div>
+      <div class="quiz-btns">
+        <button class="quiz-btn real" onclick="answerQuiz(2, 'real')">✅ ES REAL</button>
+        <button class="quiz-btn estafa" onclick="answerQuiz(2, 'estafa')">⚠️ ES ESTAFA</button>
+      </div>
+      <div class="quiz-feedback"></div>
+      <button class="quiz-next" onclick="nextQuiz()">Siguiente →</button>
+    </div>
+
+    <div class="quiz-case" data-quiz="3">
+      <div class="message">"DIAN: Se le da aviso preliminar de embargo de activos bancarios debido a mora en su obligación fiscal. Plazo máximo 31/03/2025. Más detalles: bityl.co/Diangov"</div>
+      <div class="quiz-btns">
+        <button class="quiz-btn real" onclick="answerQuiz(3, 'real')">✅ ES REAL</button>
+        <button class="quiz-btn estafa" onclick="answerQuiz(3, 'estafa')">⚠️ ES ESTAFA</button>
+      </div>
+      <div class="quiz-feedback"></div>
+      <button class="quiz-next" onclick="nextQuiz()">Siguiente →</button>
+    </div>
+
+    <div class="quiz-case" data-quiz="4">
+      <div class="message">"Su hija le envía un mensaje desde su número de siempre: 'Mamá, ¿puedes enviarme la foto de la receta médica que te di ayer? La necesito para la cita.'"</div>
+      <div class="quiz-btns">
+        <button class="quiz-btn real" onclick="answerQuiz(4, 'real')">✅ ES REAL</button>
+        <button class="quiz-btn estafa" onclick="answerQuiz(4, 'estafa')">⚠️ ES ESTAFA</button>
+      </div>
+      <div class="quiz-feedback"></div>
+      <button class="quiz-next" onclick="nextQuiz()">Siguiente →</button>
+    </div>
+  </div>
+
+  <div class="quiz-result">
+    <div class="score" id="quizScore">0/5</div>
+    <p style="font-size:16px;margin:10px 0;" id="quizMsg"></p>
+    <button class="quiz-restart" onclick="restartQuiz()">🔄 Intentar de nuevo</button>
+  </div>
+</div>
+
+<!-- ═══════════ SECCIÓN 5: GEMINI ═══════════ -->
+<div id="gemini" class="section">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="section-title">🤖 Gemini y Prompts</div>
+  </div>
+
+  <div class="info-box">
+    <h3>💬 ¿Qué es un prompt?</h3>
+    <p style="color:#d0d0d8;">Un <strong>prompt</strong> es simplemente lo que tú le dices a Gemini. No es nada técnico.</p>
+    <p style="color:#d0d0d8;margin-top:8px;">Imagina que necesitas que tu nieto te busque algo en el armario. Si le dices <em>"tráeme eso"</em>, no sabrá qué es. Pero si le dices <em>"Juan, búscame en el armario la caja azul de las fotos viejas"</em>, va directo.</p>
+    <p style="color:#b0b0c0;margin-top:8px;font-size:15px;"><strong>Con Gemini es igual:</strong> mientras más claro y detallado seas, mejor te responde.</p>
+  </div>
+
+  <div class="rule-box">
+    <h3>🏗️ Las 4 partes de un buen prompt</h3>
+    <p style="text-align:center;font-size:14px;margin-bottom:10px;opacity:0.8;">Como una receta: cada ingrediente en su lugar</p>
+    <div class="rule-steps">
+      <div class="rule-step">
+        <div class="num">1</div>
+        <div class="text"><strong>El Rol</strong><br>¿Quién quieres que sea?<br><span style="font-size:13px;opacity:0.8;">"Actúa como un médico..."</span></div>
+      </div>
+      <div class="rule-step">
+        <div class="num">2</div>
+        <div class="text"><strong>La Tarea</strong><br>¿Qué necesitas que haga?<br><span style="font-size:13px;opacity:0.8;">"Explícame cómo tomar la pastilla..."</span></div>
+      </div>
+      <div class="rule-step">
+        <div class="num">3</div>
+        <div class="text"><strong>El Contexto</strong><br>Detalles importantes<br><span style="font-size:13px;opacity:0.8;">"Tengo 72 años, soy diabético..."</span></div>
+      </div>
+      <div class="rule-step">
+        <div class="num">4</div>
+        <div class="text"><strong>El Formato</strong><br>¿Cómo quieres la respuesta?<br><span style="font-size:13px;opacity:0.8;">"Con palabras sencillas, en pocas líneas..."</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="color:#6db3f2;margin-bottom:8px;">Mal prompt vs Buen prompt (toque para ver)</h3>
+
+  <div class="card-stack">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          ❌ "Gemini, ¿qué tengo?"
+          <span class="hint">Toque para ver →</span>
+        </div>
+        <div class="flip-back">
+          ✅ <strong>Así se hace bien:</strong><br><br>
+          "Gemini, actúa como un médico. Tengo 68 años y me duele la rodilla izquierda al caminar. ¿Qué ejercicios suaves puedo hacer en casa? Respuesta sencilla, sin palabras médicas difíciles."
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          ❌ "Receta de sopa"
+          <span class="hint">Toque para ver →</span>
+        </div>
+        <div class="flip-back">
+          ✅ <strong>Así se hace bien:</strong><br><br>
+          "Gemini, dame una receta de sopa de verduras para una persona con presión alta. Ingredientes de plaza de mercado, máximo 30 minutos. Paso a paso y con palabras sencillas."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>🎤 Tips para dictar por voz</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <tr><td style="padding:8px;color:#4ade80;">✅</td><td style="padding:8px;color:#d0d0d8;">Hablar lento y claro</td></tr>
+      <tr><td style="padding:8px;color:#4ade80;">✅</td><td style="padding:8px;color:#d0d0d8;">Hacer pausas entre frases</td></tr>
+      <tr><td style="padding:8px;color:#4ade80;">✅</td><td style="padding:8px;color:#d0d0d8;">Decir "Gemini" para activar</td></tr>
+      <tr><td style="padding:8px;color:#4ade80;">✅</td><td style="padding:8px;color:#d0d0d8;">Revisar antes de enviar</td></tr>
+      <tr><td style="padding:8px;color:#f87171;">❌</td><td style="padding:8px;color:#d0d0d8;">No dar datos personales</td></tr>
+      <tr><td style="padding:8px;color:#f87171;">❌</td><td style="padding:8px;color:#d0d0d8;">No gritar ni hablar con prisa</td></tr>
+    </table>
+  </div>
+
+  <div class="info-box">
+    <h3>📋 Prompts para la vida diaria</h3>
+    <ul class="scam-list" style="border-left-color:#6db3f2;">
+      <li style="background:#1a2a30;border-left-color:#6db3f2;"><strong>🍳 Cocina:</strong> "Dame una receta de sancocho para 6 personas, en pasos cortos, ingredientes de plaza."</li>
+      <li style="background:#1a2a30;border-left-color:#6db3f2;"><strong>🩺 Salud:</strong> "¿Qué alimentos ayudan a bajar la presión alta? Dame una lista para Colombia."</li>
+      <li style="background:#1a2a30;border-left-color:#6db3f2;"><strong>✉️ Mensajes:</strong> "Ayúdame a escribir un mensaje de WhatsApp para mi nieto que cumple 15 años."</li>
+      <li style="background:#1a2a30;border-left-color:#6db3f2;"><strong>📰 Noticias:</strong> "Dame las noticias de Colombia hoy en 5 puntos, lenguaje sencillo."</li>
+      <li style="background:#1a2a30;border-left-color:#6db3f2;"><strong>⏰ Organización:</strong> "Ayúdame a organizar mi día: cita médica 9am, almuerzo, banco en la tarde."</li>
+      <li style="background:#1a2a30;border-left-color:#6db3f2;"><strong>🎭 Entretenimiento:</strong> "Cuéntame un chiste colombiano limpio y sano. Que sea corto."</li>
+    </ul>
+  </div>
+
+  <div class="info-box" style="border-left:4px solid #f39c12;background:#1a1a25;">
+    <h3 style="color:#f39c12;">⚠️ Advertencias importantes</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <tr><td style="padding:6px;">🏥</td><td style="padding:6px;color:#d0d0d8;"><strong>Gemini NO es médico.</strong> Si te sientes mal, ve a tu doctor.</td></tr>
+      <tr><td style="padding:6px;">🏦</td><td style="padding:6px;color:#d0d0d8;"><strong>Gemini NO es banco.</strong> No compartas datos bancarios.</td></tr>
+      <tr><td style="padding:6px;">👮</td><td style="padding:6px;color:#d0d0d8;"><strong>Gemini NO es abogado.</strong> No le preguntes temas legales.</td></tr>
+      <tr><td style="padding:6px;">🔒</td><td style="padding:6px;color:#d0d0d8;"><strong>No compartas datos personales:</strong> cédula, claves, dirección.</td></tr>
+    </table>
+  </div>
+
+  <div class="rule-box" style="background:linear-gradient(135deg,#1a2a30,#1a3a40);">
+    <p style="text-align:center;font-size:15px;">🌟 <em>"Gemini es como un nieto muy inteligente que no vive contigo: no sabe nada de tu vida hasta que TÚ se lo cuentas. Mientras más le cuentes, mejor te ayuda."</em></p>
+  </div>
+</div>
+
+<script>
+  // ── Navigation ──
+  function openSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function goHome() {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('home').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // ── Password Checker ──
+  function checkPassword() {
+    const pw = document.getElementById('passInput').value;
+    const fill = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    const fb = document.getElementById('passFeedback');
+
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (pw.length >= 12) score++;
+    if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^a-zA-Z0-9]/.test(pw)) score++;
+
+    const levels = [
+      { w: '15%', c: '#e74c3c', t: '😱 Muy débil', txt: 'Evite contraseñas así. Use la fórmula.' },
+      { w: '30%', c: '#e67e22', t: '😕 Débil', txt: 'Agregue mayúsculas, números o símbolos.' },
+      { w: '55%', c: '#f39c12', t: '😐 Regular', txt: 'Va bien. Alárguela un poco más.' },
+      { w: '75%', c: '#2ecc71', t: '💪 Buena', txt: '¡Bastante segura! Revise el checklist.' },
+      { w: '100%', c: '#27ae60', t: '🛡️ Muy segura', txt: '¡Excelente contraseña! Anótela en su cuaderno.' }
+    ];
+
+    const level = levels[Math.min(score, 4)];
+    fill.style.width = level.w;
+    fill.style.background = level.c;
+    label.textContent = level.t;
+    label.style.color = level.c;
+    fb.textContent = pw.length > 0 ? level.txt : '';
+  }
+
+  // ── Quiz ──
+  const answers = [
+    { answer: 'estafa', explanation: '¡Es ESTAFA! Es la estafa clásica del "familiar herido". Verifique siempre llamando al número antiguo que usted ya tiene guardado.' },
+    { answer: 'real', explanation: 'Puede ser REAL. No pide datos personales, no tiene enlace, no genera urgencia. Pero si duda, llame directamente a la EPS.' },
+    { answer: 'estafa', explanation: '¡Es ESTAFA! Es la estafa del "Plan Cardif" que circula por SMS en Colombia. El dominio ".ru" es ruso, no de Bancolombia. El banco nunca envía links de cancelación por mensaje de texto.' },
+    { answer: 'estafa', explanation: '¡Es ESTAFA! La DIAN solo usa canales oficiales .gov.co, nunca envía enlaces acortados como "bityl.co". Las notificaciones de la DIAN llegan al correo electrónico registrado, no por SMS.' },
+    { answer: 'real', explanation: 'Probablemente REAL. El mensaje viene del número de siempre, pide algo concreto y cotidiano. Pero si el mensaje llegara de un número nuevo, habría que verificar.' }
+  ];
+
+  let currentQuiz = 0;
+  let correctCount = 0;
+
+  function startQuiz() {
+    currentQuiz = 0;
+    correctCount = 0;
+    document.getElementById('quizCurrent').textContent = '1';
+    document.querySelectorAll('.quiz-case').forEach((c, i) => {
+      c.classList.toggle('active', i === 0);
+      c.querySelector('.quiz-feedback').classList.remove('show', 'correcto', 'incorrecto');
+      c.querySelector('.quiz-feedback').textContent = '';
+      c.querySelector('.quiz-next').style.display = 'none';
+      c.querySelectorAll('.quiz-btn').forEach(b => b.disabled = false);
+    });
+    document.querySelector('.quiz-result').classList.remove('show');
+    openSection('quiz');
+  }
+
+  function answerQuiz(index, userAnswer) {
+    if (index !== currentQuiz) return;
+    const correct = answers[index].answer;
+    const isCorrect = userAnswer === correct;
+    if (isCorrect) correctCount++;
+
+    const caseEl = document.querySelector(`.quiz-case[data-quiz="${index}"]`);
+    caseEl.querySelectorAll('.quiz-btn').forEach(b => b.disabled = true);
+    const fb = caseEl.querySelector('.quiz-feedback');
+    fb.textContent = (isCorrect ? '✅ ¡Correcto! ' : '❌ Incorrecto. ') + answers[index].explanation;
+    fb.classList.add('show', isCorrect ? 'correcto' : 'incorrecto');
+    caseEl.querySelector('.quiz-next').style.display = 'block';
+  }
+
+  function nextQuiz() {
+    currentQuiz++;
+    if (currentQuiz >= 5) {
+      showQuizResult();
+      return;
+    }
+    document.getElementById('quizCurrent').textContent = (currentQuiz + 1);
+    document.querySelectorAll('.quiz-case').forEach((c, i) => {
+      c.classList.toggle('active', i === currentQuiz);
+      if (i === currentQuiz) {
+        c.querySelector('.quiz-feedback').classList.remove('show', 'correcto', 'incorrecto');
+        c.querySelector('.quiz-feedback').textContent = '';
+        c.querySelector('.quiz-next').style.display = 'none';
+        c.querySelectorAll('.quiz-btn').forEach(b => b.disabled = false);
+      }
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function showQuizResult() {
+    document.querySelectorAll('.quiz-case').forEach(c => c.classList.remove('active'));
+    document.getElementById('quizScore').textContent = correctCount + '/5';
+    const msgs = [
+      'Siga practicando. Revise las secciones de arriba y vuelva a intentarlo.',
+      'Va por buen camino. Revise las secciones donde tuvo dudas.',
+      '¡Bien hecho! Ya sabe identificar varias estafas.',
+      '¡Muy bien! Solo le faltó poco.',
+      '¡Excelente! Está listo para defenderse.',
+      '¡Perfecto! Usted ya es un experto en detectar estafas.'
+    ];
+    document.getElementById('quizMsg').textContent = msgs[correctCount];
+    document.querySelector('.quiz-result').classList.add('show');
+    window.scrollTo(0, 0);
+  }
+
+  function restartQuiz() {
+    startQuiz();
+  }
+
+  // ── Font Size ──
+  let currentFontSize = 18;
+  function changeFont(delta) {
+    currentFontSize = Math.max(14, Math.min(28, currentFontSize + delta));
+    document.body.style.fontSize = currentFontSize + 'px';
+    const labels = ['Mínima','Pequeña','Normal','Grande','Más grande','Extra grande','Gigante'];
+    const idx = Math.min(labels.length-1, Math.max(0, Math.floor((currentFontSize-14)/2)));
+    document.getElementById('fontLabel').textContent = labels[idx];
+  }
+
+  // ── Share ──
+  function shareGuide() {
+    const text = '🛡️ Guía de Seguridad Digital para Adultos Mayores - Aprenda a identificar estafas y protegerse';
+    const url = window.location.href;
+    window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url), '_blank');
+  }
+</script>
+
+<button class="share-float" onclick="shareGuide()" title="Compartir por WhatsApp">💬</button>
+
+</body>
+</html>
